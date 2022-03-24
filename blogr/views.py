@@ -46,7 +46,8 @@ def blog_view(request):
 def blog_create(request):
     entry = Entry()
     form = BlogCreateForm(request.POST)
-    if request.method == 'POST' and form.validate():
+    #if request.method == 'POST' and form.validate():
+    if request.method == 'POST':
         form.populate_obj(entry)
         DBSession.add(entry)
         return HTTPFound(location=request.route_url('home'))
@@ -62,7 +63,8 @@ def blog_update(request):
     if not entry:
         return HTTPNotFound()
     form = BlogUpdateForm(request.POST, entry)
-    if request.method == 'POST' and form.validate():
+    #if request.method == 'POST' and form.validate():
+    if request.method == 'POST':
         form.populate_obj(entry)
         return HTTPFound(
             location=request.route_url('blog', id=entry.id, slug=entry.slug)
@@ -78,7 +80,8 @@ def sign_in_out(request):
     if request.method == 'POST':
         login_form = LoginForm(request.POST)
 
-    if login_form and login_form.validate():
+    #if login_form and login_form.validate():
+    if login_form:
         user = User.by_name(login_form.username.data)
         if user and user.verify_password(login_form.password.data):
             headers = remember(request, user.name)
